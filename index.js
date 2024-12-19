@@ -18,6 +18,10 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+// add routes
+const userRoutes = require("./routes/userRoutes");
+app.use("/api", userRoutes);
+
 
 app.listen(PORT, (err) => {
   if (err) console.log(err);
