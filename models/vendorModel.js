@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const vendorSchema = new mongoose.Schema({
-    user:{
+    name:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
@@ -10,13 +10,22 @@ const vendorSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    isVerified: {
-        type: Boolean,
+    productListing:{
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        default: false,
+        ref: 'Product',
     },
+    rating:{
+        type: Number,
+        required: true,
+    },
+    status:{
+        type: String,
+        default: 'pending',
+    }
 },{
     timestamps: true,
 })
 
-export const Vendor = mongoose.model('Vendor', vendorSchema);
+const Vendor = mongoose.model('Vendor', vendorSchema);
+module.exports = Vendor;
