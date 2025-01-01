@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
-const { registerUser, loginUser, logoutUser } = require("../controllers/userController");
+const { registerUser, loginUser, getUserById, deleteUser } = require("../controllers/userController");
 
-router.route("/register").post(registerUser);
-router.route("/login").post(loginUser);
-router.route("/logout").get(logoutUser);
-
+router.route("/users/register").post(registerUser);
+router.route("/users/login").post(loginUser);
+router.route("/users/:id").get(isAuthenticatedUser, authorizeRoles("admin"), getUserById);
+router.route("/users/:id").delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
 
 module.exports = router;
