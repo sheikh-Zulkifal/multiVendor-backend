@@ -54,7 +54,7 @@ exports.addProduct = async (req, res) => {
       description,
       price,
       countInStock,
-      vendor: vendorId, // Associate product with the logged-in vendor
+      vendor: vendorId, 
     });
 
     return res.status(201).json({ product });

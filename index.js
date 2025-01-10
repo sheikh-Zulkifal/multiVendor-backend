@@ -20,7 +20,9 @@ app.get("/", (req, res) => {
 });
 // add routes
 const userRoutes = require("./routes/userRoutes");
-app.use("/api", userRoutes);
+const productRoutes = require("./routes/productRoutes");
+app.use("/api", userRoutes, productRoutes);
+
 
 app.listen(PORT, (err) => {
   if (err) console.log(err);
