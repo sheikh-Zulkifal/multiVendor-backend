@@ -1,4 +1,5 @@
 const { Product } = require("../models/productModel");
+const User = require("../models/userModel");
 
 // get all products
 exports.getProducts = async (req, res) => {
@@ -47,6 +48,9 @@ exports.getProductsByVendor = async (req, res) => {
 exports.addProduct = async (req, res) => {
   const { name, description, price, countInStock } = req.body;
   const vendorId = req.vendorId;
+  if(User.role !== 'vendor'){
+    return res.status(401).json({ message: "You are not authorized to add a product" });
+  }
 
   try {
     const product = await Product.create({
