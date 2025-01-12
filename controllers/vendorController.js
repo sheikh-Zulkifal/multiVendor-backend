@@ -1,4 +1,4 @@
-const {Vendor} = require("../models/vendorModel");
+const Vendor = require("../models/vendorModel");
 
 // get all vendors
 exports.getVendors = async (req, res) => {
@@ -27,6 +27,19 @@ exports.getVendor = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
- 
+//  create a vendor
+exports.createVendor = async (req, res) => {
+  const { storeName } = req.body;
+  try {
+    console.log(storeName);
 
+    const vendor = await Vendor.create({
+      storeName,
+      userId: req.user._id,
+    });
 
+    return res.status(201).json({ vendor });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

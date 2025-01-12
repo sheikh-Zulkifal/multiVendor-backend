@@ -21,7 +21,8 @@ app.get("/", (req, res) => {
 // add routes
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
-app.use("/api", userRoutes, productRoutes);
+const { vendorRoute } = require("./routes/vendorRoutes");
+app.use("/api", userRoutes, productRoutes,vendorRoute);
 
 
 app.listen(PORT, (err) => {

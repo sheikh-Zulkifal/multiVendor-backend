@@ -36,10 +36,18 @@ exports.loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });
-    return res.status(200).json({ user, token });
+
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+        expiresIn: new Date(Date.now() + process.env.COOKIE_EXPIRE),
+      })
+      .status(200)
+      .json({ user, token });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -58,7 +66,7 @@ exports.getUserById = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-} ;
+};
 
 // delete user account
 exports.deleteUser = async (req, res) => {
@@ -72,5 +80,4 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}
-
+};
