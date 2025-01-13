@@ -7,11 +7,13 @@ const orderSchema = new mongoose.Schema(
       required: true,
       ref: "User",
     },
-    Products: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Product",
-    },
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Product",
+      },
+    ],
     totalAmount: {
       type: Number,
       required: true,
@@ -20,12 +22,14 @@ const orderSchema = new mongoose.Schema(
       type: String,
       default: "pending",
     },
-    paymentStatus: {
-      type: String,
-      default: "pending",
+    payment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-export const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
+module.exports = Order;

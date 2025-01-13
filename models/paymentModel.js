@@ -4,7 +4,7 @@ const paymentSchema = new mongoose.Schema(
   {
     order: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Oder",
+      ref: "Order",
       required: true,
     },
     amount: {
@@ -13,10 +13,12 @@ const paymentSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
+      default: "card",
       required: true,
     },
     status: {
       type: String,
+      enum: ["pending", "completed", "failed"],
       default: "pending",
     },
   },
@@ -25,4 +27,5 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
-export const Payment = mongoose.model("Payment", paymentSchema);
+const Payment = mongoose.model("Payment", paymentSchema);
+module.exports = Payment;
