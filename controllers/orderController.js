@@ -5,10 +5,11 @@ const Product = require("../models/productModel");
 
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, orderItems, paymentMethodId } = req.body;
+    const userId = req.user._id;
+    const { orderItems, paymentMethodId } = req.body;
 
     // Validate input fields
-    if (!userId || !orderItems || !paymentMethodId) {
+    if (!orderItems || !paymentMethodId) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -72,17 +73,35 @@ exports.createOrder = async (req, res) => {
     });
   }
 };
-// get order by specific vendor
 exports.getOrdersByVendor = async (req, res) => {
   try {
-    const orders = await Order.find({ vendor: req.params.vendorId }).sort({
-      createdAt: -1,
-    });
+    const vendorId = req.params.vendorId;
+    // console.log("Vendor ID:", vendorId);
+
+    // Step 1: Find all products for the vendor
+    const products = await Product.find({ vendor: vendorId });
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({ message: "No products found for this vendor." });
+    }
+
+    // Step 2: Get the product IDs
+    const productIds = products.map((product) => product._id);
+
+    // Step 3: Find orders containing these products
+    const orders = await Order.find({
+      "orderItems.product": { $in: productIds },
+    }).populate({ path: "orderItems.product", select: "name price" });
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: "No orders found for this vendor." });
+    }
+
     res.status(200).json({ orders });
   } catch (error) {
-    console.error("Error getting orders:", error);
+    console.error("Error getting orders by vendor:", error);
     res.status(500).json({
-      message: "Failed to get orders.",
+      message: "Failed to get orders by vendor.",
       error: error.message,
     });
   }
