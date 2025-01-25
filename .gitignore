@@ -13,8 +13,8 @@ dist-ssr
 *.local
 
 #add config folder and the file .env in it
-config/*
-!config/.env
+config/.env
+
 
 
 # Editor directories and files
