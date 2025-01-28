@@ -76,19 +76,15 @@ exports.createOrder = async (req, res) => {
 exports.getOrdersByVendor = async (req, res) => {
   try {
     const vendorId = req.params.vendorId;
-    // console.log("Vendor ID:", vendorId);
 
-    // Step 1: Find all products for the vendor
     const products = await Product.find({ vendor: vendorId });
 
     if (!products || products.length === 0) {
       return res.status(404).json({ message: "No products found for this vendor." });
     }
 
-    // Step 2: Get the product IDs
     const productIds = products.map((product) => product._id);
 
-    // Step 3: Find orders containing these products
     const orders = await Order.find({
       "orderItems.product": { $in: productIds },
     }).populate({ path: "orderItems.product", select: "name price" });

@@ -23,7 +23,8 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const { vendorRoute } = require("./routes/vendorRoutes");
 const orderRoutes =require("./routes/orderRoutes");
-app.use("/api", userRoutes, productRoutes,vendorRoute, orderRoutes );
+const reviewRoutes = require("./routes/reviewRoutes");
+app.use("/api", userRoutes, productRoutes,vendorRoute, orderRoutes, reviewRoutes);
 
 
 app.listen(PORT, (err) => {
