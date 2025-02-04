@@ -75,7 +75,7 @@ exports.createOrder = async (req, res) => {
 };
 exports.getOrdersByVendor = async (req, res) => {
   try {
-    const vendorId = req.params.vendorId;
+    const vendorId = req.user._id;
 
     const products = await Product.find({ vendor: vendorId });
 
@@ -102,3 +102,34 @@ exports.getOrdersByVendor = async (req, res) => {
     });
   }
 };
+// Get all orders my customer
+exports.getMyOrders = async (req, res) => {
+
+  const userId = req.user._id;
+  try{
+    const orders = await Order.find({user: userId})
+    res.status(200).json({orders});
+  }catch(error){
+    res.status(500).json({message: "Server error", error: error.message});
+  }
+
+}
+
+// vendor change the order status
+
+exports.changeOrderStatus = async (req, res) => {
+  const { orderId, status } = req.body;
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found." });
+    }
+
+    order.orderStatus = status;
+    await order.save();
+
+    res.status(200).json({ message: "Order status updated successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+}

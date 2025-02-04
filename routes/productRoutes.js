@@ -26,6 +26,6 @@ router
 router.route("/products").get(isAuthenticatedUser, getProducts);
 router
   .route("/products/:vendorId")
-  .get(isAuthenticatedUser, getProductsByVendor);
+  .get(isAuthenticatedUser,isVendor, getProductsByVendor);
 
 module.exports = router;

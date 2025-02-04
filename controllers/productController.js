@@ -31,7 +31,7 @@ exports.getProduct = async (req, res) => {
 
 // get products by vendor
 exports.getProductsByVendor = async (req, res) => {
-  const vendorId = req.params.vendorId; // Get vendorId from route parameters
+  const vendorId = req.user._id; 
 
   try {
     const products = await Product.find({ vendor: vendorId });
