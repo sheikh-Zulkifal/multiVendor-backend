@@ -1,10 +1,17 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./database/database");
+const http = require("http");
+const cors = require("cors");
+const setupSocket = require("./socket");
 
 const app = express();
+const server = http.createServer(app);
+app.use(cors());
+const io = setupSocket(server);
 
-const PORT = 3000;
+const PORT = 5000;
+
 
 require("dotenv").config({ path: "./config/.env" });
 
@@ -22,13 +29,22 @@ app.get("/", (req, res) => {
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const { vendorRoute } = require("./routes/vendorRoutes");
-const orderRoutes =require("./routes/orderRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const supportAccountRoutes = require("./routes/supportAccountRoutes");
-app.use("/api", userRoutes, productRoutes,vendorRoute, orderRoutes, reviewRoutes, supportAccountRoutes);
+const messageRoutes = require("./routes/messageRoutes");
+app.use(
+  "/api",
+  userRoutes,
+  productRoutes,
+  vendorRoute,
+  orderRoutes,
+  reviewRoutes,
+  supportAccountRoutes,
+  messageRoutes
+);
 
-
-app.listen(PORT, (err) => {
+server.listen(PORT, (err) => {
   if (err) console.log(err);
-  console.log("Server is running on port " + PORT)
+  console.log("Server is running on port " + PORT);
 });
