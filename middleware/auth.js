@@ -57,3 +57,16 @@ exports.isVendor = catchAsyncError(async (req, res, next) => {
     next(error);
   }
 });
+
+exports.isSupport = catchAsyncError(async (req, res, next) => {
+  try {
+    const { user } = req;
+    if (user.role !== "support") {
+      throw new CustomError("You are not allowed to access this resource", 403);
+    }
+    next();
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
